@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>登录</title>
+<style>
+#message {
+	color: red;
+	font-size: 14px;
+}
+#center {
+	align:center;
+}
+</style>
+</head>
+<body>
+	<div id="center">
+		<form action="" method="post">
+			<div>
+				<div id="message"></div>
+				<span>账号：</span> <input type="text" id="user">
+			</div>
+			<div>
+				<span>密码:</span> <input type="password" id="password">
+			</div>
+			<div>
+				<input type="button" value="登录" id="login">
+			</div>
+		</form>
+	</div>
+</body>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+<script type="text/javascript">
+	$(function() {
+		var message = $("#message");
+		$("#login").click(function() {
+			if ($("#user").val() == "") {
+				message.html("请输入账号");
+				return;
+			}else if ($("#password").val() == "") {
+				message.html("请输入密码");
+				return;
+			}
+			$.post("http://localhost/springcloud/login", {
+				userName : $("#user").val(),
+				password : $("#password").val()
+			}, function(datas) {
+				var data = JSON.parse(datas);
+				if (data.code == "000000") {
+					document.cookie = data.data;
+					window.location.href = "/index.html";
+				} else if (data.code == "100003") {
+					message.html("账号或密码不正确");
+				} else if (data.code == "100001") {
+					message.html("参数不能为空");
+				} else {
+					message.html("系统繁忙，请稍后重试");
+				}
+			});
+		});
+	});
+</script>
+</html>

@@ -1,0 +1,19 @@
+server: 
+  port: 8778
+
+spring: 
+  application: 
+    name: hystrix-turbine
+
+eureka: 
+  client: 
+    service-url: 
+      defaultZone: http://localhost:8888/eureka
+  instance: 
+    prefer-ip-address: true
+
+turbine: 
+  appConfig: user,swagger
+  clusterNameExpression: "'default'"
+    
+      

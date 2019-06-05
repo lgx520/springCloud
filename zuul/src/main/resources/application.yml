@@ -1,0 +1,32 @@
+spring: 
+  application: 
+    name: zuul
+
+server: 
+  port: 8999
+
+eureka: 
+  client: 
+    service-url: 
+      defaultZone: http://localhost:8888/eureka
+  instance: 
+    prefer-ip-address: true
+    instance-id: zuul-${server.port}
+
+zuul: 
+  routes: 
+    common: 
+      path: /common/**
+      serviceId: user
+    swagger: 
+      path: /swagger/**
+      serviceId: swagger
+  host: 
+    connect-timeout-millis: 5000
+    socket-timeout-millis: 5000
+
+ribbon: 
+  ReadTimeout: 5000
+  ConnectTimeout: 5000
+  eureka: 
+    enable: true

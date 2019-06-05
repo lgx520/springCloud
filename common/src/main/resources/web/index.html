@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>首页</title>
+</head>
+<body>
+	<div align="center">
+		<h1>首页</h1>
+	</div>
+	<div>
+		<strong>当前登录用户信息：</strong>
+		<table id="user">
+			<tr>
+				<th>用户id</th><th>姓名</th><th>年龄</th><th>加入日期</th>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<h3>商品展示</h3>
+		<br/>
+		<div id="product">
+			
+		</div>
+	</div>
+</body>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+<script type="text/javascript">
+	$(function(){
+		var token = document.cookie;
+		//调用用户微服务
+		$.ajax({
+			url: "http://localhost/springcloud/index",
+			type: "post",
+			dataType: "json",
+			headers: {
+				Accept: "application/json; charset=utf-8", 
+				userToken: token
+			},
+			success : function(data){
+				if (data.code == "000000") {
+					var user = data.data;
+					var userTable = $("#user");
+					var option = "<tr><td>" + user.id + "</td>"
+							     + "<td>" + user.name + "</td>"
+							     + "<td>" + user.age + "</td>"
+							     + "<td>" + user.createTime + "</td></tr>";
+					userTable.append(option);
+				} else {
+					alert("系统繁忙，请稍后重试!");
+				}
+			}
+		});
+	})
+</script>
+</html>

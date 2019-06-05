@@ -1,0 +1,27 @@
+server: 
+  port: 8101
+
+spring: 
+  application: 
+    name: user-client #服务名称
+      #配置连接mq
+  activemq: 
+    broker-url: tcp://localhost:61616
+    in-memory: true
+    pool: 
+      enabled: false
+
+eureka: 
+  client: 
+    service-url: 
+      defaultZone: http://localhost:8888/eureka
+  instance: 
+    prefer-ip-address: true
+    instance-id: user-client-${server.port}
+
+#开启feign服务熔断
+feign: 
+  hystrix: 
+    enabled: true
+
+debug: true
