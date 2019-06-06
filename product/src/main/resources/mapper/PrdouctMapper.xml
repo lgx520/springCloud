@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.product.mapper.ProductMapper">
+	<!-- 查询数据 -->
+	<select id="getProductList" resultType="com.product.pojo.Product">
+		select id,productName,productColor,productPrice from spring_product
+		<where>
+			<if test="id != null and id > 0">
+				and id = #{id}
+			</if>
+			<if test="productName != null and productName != ''">
+				and productName = #{productName}
+			</if>
+			<if test="productColor != null and productColor != ''">
+				and productColor = #{productColor}
+			</if>
+			<if test="productPrice != null">
+				and productPrice = #{productPrice}
+			</if>
+		</where>
+	</select>
+</mapper>

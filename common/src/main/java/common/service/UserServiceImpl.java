@@ -1,5 +1,6 @@
 package common.service;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -48,10 +49,10 @@ public class UserServiceImpl implements UserService{
 			
 			User user = new User();
 			user.setId(id);
-			User queryUser = this.userMapper.queryUser(user);
-			if (queryUser != null) {
+			List<User> userList = this.userMapper.getUserList(user);
+			if (userList != null && !userList.isEmpty()) {
 				result.setResult(SystemEnum.SYSTEM_SUCCESS);
-				result.setData(queryUser);
+				result.setData(userList.get(0));
 			} else {
 				result.setResult(SystemEnum.SYSTEM_QUERY_USER_ID);
 			}
@@ -81,12 +82,13 @@ public class UserServiceImpl implements UserService{
 		try {
 			//加密比较
 			user.setPassword(MD5Util.MD5(user.getPassword()));
-			User loginUser = this.userMapper.queryUser(user);
-			if (loginUser != null) {
+			List<User> userList = this.userMapper.getUserList(user);
+			
+			if (userList != null && !userList.isEmpty()) {
 				//签发token
-				String token = TokenUtil.sign(loginUser);
+				String token = TokenUtil.sign(userList.get(0));
 				//服务端保存token,过期时间为一小时
-				this.redisService.setValueTime(loginUser.getId().toString(), token, 1, TimeUnit.HOURS);
+				this.redisService.setValueTime(userList.get(0).getId().toString(), token, 1, TimeUnit.HOURS);
 				result.setResult(SystemEnum.SYSTEM_SUCCESS);
 				result.setData(token);
 			} else {

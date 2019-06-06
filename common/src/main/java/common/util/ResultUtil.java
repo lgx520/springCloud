@@ -1,5 +1,7 @@
 package common.util;
 
+import java.util.List;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
@@ -12,6 +14,7 @@ public class ResultUtil<T> {
 	 * 数据
 	 */
 	private T data;
+	private List<T> dataList;
 	
 	public ResultUtil() {
 		this.result = null;
@@ -24,6 +27,7 @@ public class ResultUtil<T> {
 		obj.put("code", result.getCode());
 		obj.put("desc", result.getDesc());
 		obj.put("data", data);
+		obj.put("dataList", dataList);
 		
 		return JSON.toJSONString(obj);
 	}
@@ -43,4 +47,13 @@ public class ResultUtil<T> {
 	public T getData() {
 		return data;
 	}
+
+	public List<T> getDataList() {
+		return dataList;
+	}
+
+	public void setDataList(List<T> dataList) {
+		this.dataList = dataList;
+	}
+	
 }

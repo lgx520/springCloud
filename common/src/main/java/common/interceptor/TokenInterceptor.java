@@ -1,5 +1,6 @@
 package common.interceptor;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +13,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import common.service.redis.RedisService;
+import common.util.ResultUtil;
+import common.util.SystemEnum;
 import common.util.TokenUtil;
 
 /**
@@ -24,9 +27,9 @@ public class TokenInterceptor implements HandlerInterceptor{
 	private static final String TOKEN_NAME = "userToken";
 	private static final String LOGIN = "login";
 	private static final String USER_ID = "id";
-	private static final String LOGIN_HEML = "/login.html";
 	
 	static final Logger log = LoggerFactory.getLogger(TokenInterceptor.class);
+	
 	@Autowired
 	private RedisService redisService;
 	
@@ -34,11 +37,10 @@ public class TokenInterceptor implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		
-		//拿出token
-		String token = request.getHeader(TOKEN_NAME);
-		//判断当前页面是否是登录页面
+		response.setContentType("text/html;charset=utf-8");
 		if (!request.getRequestURI().contains(LOGIN)) {
+			//拿出token
+			String token = request.getHeader(TOKEN_NAME);
 			//校验token
 			DecodedJWT doToken = TokenUtil.doToken(token);
 			if (doToken != null) {
@@ -51,21 +53,11 @@ public class TokenInterceptor implements HandlerInterceptor{
 					log.info("用户" + userId + "通过拦截器，授权访问！");
 					return true;
 				} else {
-					response.setContentType("text/html;charset=utf-8");
-					//token过期，重新登录
-					response.sendRedirect("/login.html");
-					//设置请求头
-					response.addHeader("REDIRECT", "REDIRECT");//告诉ajax这是重定向 
-					response.addHeader("CONTEXTPATH", LOGIN_HEML);//重定向地址
+					sendRedirect(response, request);
 					return false;
 				}
 			} else {
-				response.setContentType("text/html;charset=utf-8");
-				//token失效
-				response.sendRedirect("/login.html");
-				//设置请求头
-				response.addHeader("REDIRECT", "REDIRECT");//告诉ajax这是重定向 
-				response.addHeader("CONTEXTPATH", LOGIN_HEML);//重定向地址
+				sendRedirect(response, request);
 				return false;
 			}
 		} else {
@@ -73,7 +65,21 @@ public class TokenInterceptor implements HandlerInterceptor{
 			return true;
 		}
 	}
-
+	
+	private void sendRedirect(HttpServletResponse response, HttpServletRequest request) throws IOException {
+		String status = request.getHeader("status");
+		System.out.println(status);
+		if ("ajax".equals(status)) {
+			ResultUtil<String> result = new ResultUtil<>();
+			result.setResult(SystemEnum.SYSTEM_TOKEN);
+			result.setData("http://localhost/login.html");
+			response.getWriter().write(result.toString());
+		} else {
+			response.sendRedirect("http://localhost/login.html");
+		}
+	}
+	
+	
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {

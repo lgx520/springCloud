@@ -2,10 +2,13 @@ package common.controller;
 
 import java.util.concurrent.ExecutionException;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
@@ -31,9 +34,9 @@ public class IndexController {
 	 * @throws InterruptedException 
 	 */
 	@PostMapping("/index")
-	public String queryUserId(String token) {
+	public String queryUserId(HttpServletRequest request) {
+		String token = request.getHeader("userToken");
 		showLog("根据id查询用户数据", "queryUserId()", token);
-		 
 		String queryUser = this.userService.queryUser(token);
 		closeLog("根据id查询用户数据", "queryUserId()", queryUser);
 		return queryUser;
@@ -43,7 +46,7 @@ public class IndexController {
 	 * 登录接口
 	 */
 	@PostMapping("/login")
-	public String doLogin(User user) {
+	public String doLogin(@RequestBody User user) {
 		showLog("登录", "doLogin()", user);
 		String loginUser = this.userService.loginUser(user);
 		closeLog("登录", "doLogin()", loginUser);

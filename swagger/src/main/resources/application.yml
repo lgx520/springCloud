@@ -1,15 +1,9 @@
 server: 
-  port: 8101
+  port: 8102
 
 spring: 
   application: 
     name: user-client #服务名称
-      #配置连接mq
-  activemq: 
-    broker-url: tcp://localhost:61616
-    in-memory: true
-    pool: 
-      enabled: false
 
 eureka: 
   client: 

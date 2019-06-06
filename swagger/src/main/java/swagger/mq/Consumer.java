@@ -1,6 +1,6 @@
 package swagger.mq;
 
-import org.springframework.jms.annotation.JmsListener;
+//import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,7 +15,7 @@ public class Consumer {
 	 * @param text
 	 * @return
 	 */
-	@JmsListener(destination = "name")
+	//@JmsListener(destination = "name")
 	//@SendTo("user") 将text又返回至user  MQ队列中
 	public String receiveQueue(String text) {
 		return text;

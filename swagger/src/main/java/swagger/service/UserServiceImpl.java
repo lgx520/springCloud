@@ -13,16 +13,16 @@ import swagger.util.SystemEnum;
 public class UserServiceImpl implements UserService{
 
 	@Override
-	public String index(String token) {
+	public String index() {
 		ResultUtil<String> result = new ResultUtil<>();
-		result.setResult(SystemEnum.SYSTEM_ERROR);
+		result.setResult(SystemEnum.SYSTEM_HYSTRIX);
 		return result.toString();
 	}
 
 	@Override
 	public String login(User user) {
 		ResultUtil<String> result = new ResultUtil<>();
-		result.setResult(SystemEnum.SYSTEM_ERROR);
+		result.setResult(SystemEnum.SYSTEM_HYSTRIX);
 		return result.toString();
 	}
 	

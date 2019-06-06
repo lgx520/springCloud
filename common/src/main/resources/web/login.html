@@ -41,7 +41,7 @@
 				message.html("请输入密码");
 				return;
 			}
-			$.post("http://localhost/springcloud/login", {
+			$.post("http://localhost/springcloudUser/login", {
 				userName : $("#user").val(),
 				password : $("#password").val()
 			}, function(datas) {

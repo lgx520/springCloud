@@ -12,42 +12,93 @@
 		<strong>当前登录用户信息：</strong>
 		<table id="user">
 			<tr>
-				<th>用户id</th><th>姓名</th><th>年龄</th><th>加入日期</th>
+				<th>用户id</th>
+				<th>姓名</th>
+				<th>年龄</th>
+				<th>加入日期</th>
 			</tr>
 		</table>
 	</div>
 	<div>
 		<h3>商品展示</h3>
-		<br/>
-		<div id="product">
-			
+		<br />
+		<div>
+			<table id="product">
+				<tr>
+					<th>商品名称</th>
+					<th>颜色</th>
+					<th>价格</th>
+				</tr>
+			</table>
 		</div>
 	</div>
 </body>
 <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
 <script type="text/javascript">
-	$(function(){
+	$(function() {
 		var token = document.cookie;
 		//调用用户微服务
 		$.ajax({
-			url: "http://localhost/springcloud/index",
-			type: "post",
-			dataType: "json",
-			headers: {
-				Accept: "application/json; charset=utf-8", 
-				userToken: token
+			url : "http://localhost/springcloudUser/index",
+			type : "get",
+			dataType : "json",
+			headers : {
+				Accept : "application/json; charset=utf-8",
+				userToken : token
 			},
-			success : function(data){
+			success : function(data) {
 				if (data.code == "000000") {
 					var user = data.data;
 					var userTable = $("#user");
-					var option = "<tr><td>" + user.id + "</td>"
-							     + "<td>" + user.name + "</td>"
-							     + "<td>" + user.age + "</td>"
-							     + "<td>" + user.createTime + "</td></tr>";
+					var option = "<tr><td>" + user.id + "</td>" + "<td>"
+							+ user.name + "</td>" + "<td>" + user.age + "</td>"
+							+ "<td>" + user.createTime + "</td></tr>";
 					userTable.append(option);
 				} else {
 					alert("系统繁忙，请稍后重试!");
+				}
+			}
+		});
+
+		//调用订单微服务
+		$.ajax({
+			url : "http://localhost/springcloudProduct/product/getProductList",
+			type : "get",
+			dataType : "json",
+			headers : {
+				Accept : "application/json; charset=utf-8",
+				userToken : token
+			},
+			success : function(data) {
+				var productTable = $("#product");
+				if (data.code == "000000") {
+					var option = "";
+					for (i = 0; i < data.dataList.length; i++) {
+						var dataList = data.dataList[i];
+						var option = "<tr><td>" + dataList.productName
+								+ "</td>" + "<td>" + dataList.productColor
+								+ "</td>" + "<td>" + dataList.productPrice
+								+ "</td></tr>";
+					}
+					productTable.append(productTable);
+				} else if (data.code == "200001") {
+					productTable.html("<tr><td>暂无数据</td</tr>")
+				} else if (data.code == "999999") {
+					alert("系统繁忙，请稍后重试");
+				}
+			}
+		});
+
+		var jqxhr;
+		//设置ajax请求完成后运行的函数,
+		$.ajaxSetup({
+			complete : function() {
+				if ("REDIRECT" == jqxhr.getResponseHeader("REDIRECT")) { //若HEADER中含有REDIRECT说明后端想重定向，
+					var win = window;
+					while (win != win.top) {
+						win = win.top;
+					}
+					win.location.href = jqxhr.getResponseHeader("CONTENTPATH");//将后端重定向的地址取出来,使用win.location.href去实现重定向的要求
 				}
 			}
 		});

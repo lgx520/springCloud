@@ -56,5 +56,6 @@
 		<module>hystrix-turbine</module>
 		<module>config-server</module>
 		<module>product</module>
+		<module>product-client</module>
 	</modules>
 </project>
