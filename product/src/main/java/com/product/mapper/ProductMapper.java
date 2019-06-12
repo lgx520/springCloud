@@ -1,7 +1,6 @@
 package com.product.mapper;
 
 import java.util.List;
-
 import org.springframework.stereotype.Component;
 
 import com.product.pojo.Product;

@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import swagger.pojo.User;
-import swagger.service.StatusService;
 import swagger.service.UserService;
+import swagger.service.UserServiceHystrix;
 
 /**
  * 用户中心服务消费者
@@ -17,19 +17,21 @@ import swagger.service.UserService;
  *
  */
 @RestController
+@RequestMapping("/user")
 public class IndexController {
 	
 	@Autowired
-	private UserService userService;
+	private UserServiceHystrix userServiceHystrix;
+	
 	@Autowired
-	private StatusService statusService;
+	private UserService userService;
 	
 	/**
 	 * 调用用户查询接口
 	 */
 	@PostMapping("/index")
 	public String queryByUserId(HttpServletRequest request) {
-		return userService.index();
+		return userServiceHystrix.index();
 	}
 	
 	/**
@@ -37,7 +39,15 @@ public class IndexController {
 	 */
 	@PostMapping("/login")
 	public String login(User user) {
-		return userService.login(user);
+		return userServiceHystrix.login(user);
+	}
+	
+	/**
+	 * 退出登录
+	 */
+	@PostMapping("/exit")
+	public String exit() {
+		return userService.exit();
 	}
 	
 	/**
@@ -45,7 +55,7 @@ public class IndexController {
 	 */
 	@RequestMapping("/success")
 	public String success() {
-		return this.statusService.success();
+		return userService.success();
 	}
 	
 }

@@ -4,7 +4,7 @@
 <mapper namespace="com.product.mapper.ProductMapper">
 	<!-- 查询数据 -->
 	<select id="getProductList" resultType="com.product.pojo.Product">
-		select id,productName,productColor,productPrice from spring_product
+		select id,productName,productColor,productPrice,productHeat from spring_product
 		<where>
 			<if test="id != null and id > 0">
 				and id = #{id}
@@ -17,6 +17,9 @@
 			</if>
 			<if test="productPrice != null">
 				and productPrice = #{productPrice}
+			</if>
+			<if test="productHeat != null">
+				and productHeat = #{productHeat}
 			</if>
 		</where>
 	</select>

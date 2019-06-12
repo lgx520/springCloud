@@ -21,6 +21,7 @@ import common.service.UserService;
  *
  */
 @RestController
+@RequestMapping("/user")
 public class IndexController {
 	static final Logger log = LoggerFactory.getLogger(IndexController.class);
 	
@@ -51,6 +52,26 @@ public class IndexController {
 		String loginUser = this.userService.loginUser(user);
 		closeLog("登录", "doLogin()", loginUser);
 		return loginUser;
+	}
+	
+	/**
+	 * 退出登录接口
+	 */
+	@PostMapping("/exit")
+	public String exit(HttpServletRequest request) {
+		showLog("退出", "exit()", null);
+		String token = request.getHeader("userToken");
+		String exit = this.userService.exit(token);
+		showLog("退出", "exit()", exit);
+		return exit;
+	}
+	
+	/**
+	 * 用户登录校验
+	 */
+	@PostMapping("/loginCheck")
+	public String loginCheck() {
+		return "success";
 	}
 	
 	/**

@@ -44,7 +44,6 @@ public class UserServiceImpl implements UserService{
 		try {
 			//验证token
 			DecodedJWT doToken = TokenUtil.doToken(token);
-			
 			Integer id = doToken.getClaim("id").asInt();
 			
 			User user = new User();
@@ -94,6 +93,35 @@ public class UserServiceImpl implements UserService{
 			} else {
 				result.setResult(SystemEnum.SYSTEM_USER_LOGIN_USER);
 			}
+		} catch (Exception e) {
+			log.error("", e);
+			result.setResult(SystemEnum.SYSTEM_ERROR);
+		}
+		
+		return result.toString();
+	}
+	
+	/**
+	 * 退出登录
+	 */
+	@Override
+	public String exit(String token) {
+		ResultUtil<String> result = new ResultUtil<>();
+		
+		try {
+			CheckUtil.isNotNull(token);
+		} catch (Exception e) {
+			log.error("", e);
+			result.setResult(SystemEnum.SYSTEM_TOKEN);
+			return result.toString();
+		}
+		
+		//验证token
+		DecodedJWT doToken = TokenUtil.doToken(token);
+		Integer id = doToken.getClaim("id").asInt();
+		try {
+			this.redisService.remove(id.toString());
+			result.setResult(SystemEnum.SYSTEM_SUCCESS);
 		} catch (Exception e) {
 			log.error("", e);
 			result.setResult(SystemEnum.SYSTEM_ERROR);

@@ -1,0 +1,47 @@
+server: 
+  port: 8101
+  address: 192.168.37.246
+
+spring: 
+  application: 
+    name: user #服务名称
+  redis: 
+    hostName: 127.0.0.1
+    port: 6379
+    pool: 
+      maxActive: 8
+      maxWait: 1
+      maxIdle: 8
+      minIdle: 0
+    timeout: 0
+  #数据库连接配置
+  datasource: 
+    url: jdbc:mysql://localhost:3306/springcloud
+    username: root
+    password: liguoxing
+    driver-class-name: com.mysql.jdbc.Driver
+  #注册中心使用consul
+  cloud: 
+    consul: 
+      host: localhost
+      port: 8500
+      discovery: 
+        serviceName: user
+        healthCheckPath: /user/success #健康检查
+        healthCheckInterval: 30s #健康检查频率
+        ip-address: true
+        instance-id: ${spring.application.name}:${server.port}
+        
+#Mybatis配置
+mybatis: 
+  #Mapper.xml文件存放路径
+  mapperLocations: classpath:**/mapper/*.xml
+  #实体类路径
+  type-aliases-package: common.pojo
+
+logging: 
+  config: classpath:logback-spring.xml
+  path: E:/log
+
+debug: true
+

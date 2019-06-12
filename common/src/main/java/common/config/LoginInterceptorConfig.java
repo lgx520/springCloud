@@ -47,8 +47,8 @@ public class LoginInterceptorConfig implements WebMvcConfigurer{
 		//拦截路径
 		loginReg.addPathPatterns("/**");
 		//排除路径
-		loginReg.excludePathPatterns("/login");
-		loginReg.excludePathPatterns("/loginout");
+		loginReg.excludePathPatterns("/user/login");
+		loginReg.excludePathPatterns("/user/success");
 	}
 	
 	

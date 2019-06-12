@@ -12,7 +12,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  *
  */
 @SpringBootApplication
-//@EnableEurekaClient //注册中心使用eureka
 @EnableCircuitBreaker //开启服务监控
 @EnableDiscoveryClient
 @MapperScan("common.mapper")

@@ -41,7 +41,6 @@ public class WebLogAspect {
 		// 记录下请求内容
 		log.info("IP:" + request.getRemoteAddr() + "，发起请求。");
 		log.info("请求路径：URL : " + request.getRequestURL().toString());
-		log.info("请求方法： : " + request.getMethod());
 		Enumeration<String> enu = request.getParameterNames();
 		log.info("请求参数：");
 		while (enu.hasMoreElements()) {

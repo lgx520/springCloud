@@ -1,4 +1,4 @@
-package com.product.service;
+package com.product.service.impl;
 
 import java.util.List;
 
@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.product.mapper.ProductMapper;
 import com.product.pojo.Product;
+import com.product.service.ProductService;
+import com.product.util.CheckUtil;
 import com.product.util.ResultUtil;
 import com.product.util.SystemEnum;
 
@@ -35,6 +37,35 @@ public class ProductServiceImpl implements ProductService{
 			result.setResult(SystemEnum.SYSTEM_ERROR);
 		}
 		
+		return result.toString();
+	}
+	
+	/**
+	 * 查询商品详情
+	 */
+	@Override
+	public String getProductById(Integer id) {
+		ResultUtil<Product> result = new ResultUtil<>();
+		try {
+			CheckUtil.isNotNull(id);
+		} catch (Exception e) {
+			log.error("", e);
+			result.setResult(SystemEnum.SYSTEM_PARAM_NULL);
+			return result.toString();
+		}
+		
+		Product product = new Product();
+		product.setId(id);
+		try {
+			List<Product> productList = this.productMapper.getProductList(product);
+			if (productList != null) {
+				result.setData(productList.get(0));
+				result.setResult(SystemEnum.SYSTEM_SUCCESS);
+			}
+		} catch (Exception e) {
+			log.error("", e);
+			result.setResult(SystemEnum.SYSTEM_ERROR);
+		}
 		return result.toString();
 	}
 

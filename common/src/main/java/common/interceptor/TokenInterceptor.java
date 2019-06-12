@@ -38,6 +38,7 @@ public class TokenInterceptor implements HandlerInterceptor{
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		response.setContentType("text/html;charset=utf-8");
+		log.info("请求路径url------------------->>" + request.getRequestURI());
 		if (!request.getRequestURI().contains(LOGIN)) {
 			//拿出token
 			String token = request.getHeader(TOKEN_NAME);
@@ -47,10 +48,10 @@ public class TokenInterceptor implements HandlerInterceptor{
 				String userId = doToken.getClaim(USER_ID).asInt().toString();
 				//从redis中拿出token比较
 				String code = this.redisService.getKey(userId);
-				if (null != code && !"".equals(code) && code.equals(token)) {
+				if (null != code && code.equals(token)) {
 					//校验成功,重新设置过期时间
 					this.redisService.setValueTime(userId, token, 1, TimeUnit.HOURS);
-					log.info("用户" + userId + "通过拦截器，授权访问！");
+					log.info("用户" + userId + "授权访问！");
 					return true;
 				} else {
 					sendRedirect(response, request);
@@ -68,7 +69,6 @@ public class TokenInterceptor implements HandlerInterceptor{
 	
 	private void sendRedirect(HttpServletResponse response, HttpServletRequest request) throws IOException {
 		String status = request.getHeader("status");
-		System.out.println(status);
 		if ("ajax".equals(status)) {
 			ResultUtil<String> result = new ResultUtil<>();
 			result.setResult(SystemEnum.SYSTEM_TOKEN);
@@ -93,7 +93,4 @@ public class TokenInterceptor implements HandlerInterceptor{
 		
 
 	}
-	
-	
-
 }

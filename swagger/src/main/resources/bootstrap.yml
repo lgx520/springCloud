@@ -1,0 +1,28 @@
+server: 
+  port: 8102
+  address: 192.168.37.246
+
+spring: 
+  application: 
+    name: user-client #服务名称
+  #注册中心使用consul
+  cloud: 
+    consul: 
+      host: 127.0.0.1
+      port: 8500
+      discovery: 
+        serviceName: user-client
+        healthCheckPath: /user/success #健康检查
+        healthCheckInterval: 30s #健康检查频率
+        ip-address: true
+        instance-id: ${spring.application.name}:${server.port}
+
+#开启feign服务熔断
+feign: 
+  hystrix: 
+    enabled: true
+ribbon: 
+  consul: 
+    enabled: true
+
+debug: true

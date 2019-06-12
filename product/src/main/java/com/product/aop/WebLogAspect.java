@@ -39,7 +39,6 @@ public class WebLogAspect {
 		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 		HttpServletRequest request = attributes.getRequest();
 		// 记录下请求内容
-		log.info("IP:" + request.getRemoteAddr() + "，发起请求。");
 		log.info("请求路径：URL : " + request.getRequestURL().toString());
 		log.info("请求方法： : " + request.getMethod());
 		Enumeration<String> enu = request.getParameterNames();

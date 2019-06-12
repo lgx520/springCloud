@@ -13,6 +13,8 @@ public class Product implements Serializable{
 	private String productColor;
 	//价格
 	private Double productPrice;
+	//热度
+	private Integer productHeat;
 	
 	
 	
@@ -24,6 +26,12 @@ public class Product implements Serializable{
 	
 	
 	
+	public Integer getProductHeat() {
+		return productHeat;
+	}
+	public void setProductHeat(Integer productHeat) {
+		this.productHeat = productHeat;
+	}
 	public Integer getId() {
 		return id;
 	}

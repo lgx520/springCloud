@@ -13,4 +13,8 @@ public interface UserService {
 	 * 登录
 	 */
 	String loginUser(User user);
+	/**
+	 * 退出登录
+	 */
+	String exit(String token);
 }

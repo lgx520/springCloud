@@ -10,7 +10,7 @@ import com.alibaba.fastjson.JSONObject;
 public enum SystemEnum {
 	
 	SYSTEM_SUCCESS("000000","成功"),SYSTEM_ERROR("999999","系统繁忙，请稍后重试"),
-	SYSTEM_PARAM_NULL("100001","参数不能为空"),SYSTEM_HYSTRIX("100006","服务异常，断路器关闭"),
+	SYSTEM_PARAM_NULL("100001","参数不能为空"),SYSTEM_HYSTRIX("100006","服务异常，断路器打开"),
 	SYSTEM_USER_LOGIN_USER("100003","账号或密码错误"),SYSTEM_QUERY_USER_ID("100004","用户不存在");
 
 	SystemEnum(String code, String desc) {
